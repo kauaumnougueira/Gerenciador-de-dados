@@ -1,0 +1,43 @@
+##MEMBERS_DATA##
+#MEMBER#
+Pedro Rocha Boucinhas Pacheco
+Tesoureiro
+(98) 9 9968-1429
+27/11/2001
+2018.1
+########
+#MEMBER#
+Lucas Batista dos Santos
+Vice-líder
+(98) 9 9968-4165
+25/11/2001
+2015
+########
+#MEMBER#
+Kaua Nogueira Araujo
+Membro
+(98) 9 8715-3564
+05/02/2004
+2018.1
+########
+##REPORTS_DATA##
+#REPORT#
+12/02/2021
+-
+Joao Paulo, Augusto
+-
+Ap. Edson
+Casa de Nando
+R$ 32,00
+-
+########
+#REPORT#
+27/01/2021
+-
+Jost
+-
+Anderson
+Casa de Nando
+-
+-
+########
