@@ -9,14 +9,14 @@ from interface import *
 menu
     - overview
     - members
-        + listar membros
-        + cadastrar membros
+        + listMembers
+        + memberRegistration
     - reports
-        + listar relatórios
-        + cadastrar relatórios
+        + listReports
+        + newReport
     - backups
-        + listar backups
-        + fazer novo backup
+        + listBackups
+        + newBackup
 """
 
 
@@ -104,7 +104,7 @@ menu()
 
 #CONFIGURAÇÕES APLICADAS NA INICIALIZAÇÃO
 window.title("Célula Nova Vida")
-window.iconphoto(True, PhotoImage(file='icone_app.png'))
+window.iconphoto(True, PhotoImage(file='img/icone_app.png'))
 window.geometry("325x400")
 window.resizable(width = 0, height = 0)
 window.mainloop()

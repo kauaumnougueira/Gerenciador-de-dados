@@ -1,16 +1,16 @@
-Gerenciador de dados
+<h1>Gerenciador de dados</h1>
 
 <hr>
 
 <h3>Recomendações</h3>
-- Conhecimentos básicos de Python
+- Conhecimentos básicos de Python<br>
 - Conhecimentos da biblioteca Tkinter
 
 <hr>
 
 <h3>Estrutura do programa</h3>
 
-MENU
+<h2>MENU</h2>
 - Visão geral
 - Membros
     + Listar membros
