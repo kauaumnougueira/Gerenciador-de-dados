@@ -4,7 +4,7 @@
 <ul>
     <li>Conhecimentos básicos de Python</li>
     <li>Conhecimentos da biblioteca Tkinter</li>
-</lu>
+</ul>
 <hr>
 <h3>Estrutura do programa</h3>
 <h2>MENU</h2>
