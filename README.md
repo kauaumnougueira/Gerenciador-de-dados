@@ -1,13 +1,13 @@
 <h1>Gerenciador de dados</h1>
 <hr>
-<h3>Recomendações</h3>
+<h2>Recomendações</h2>
 <ul>
     <li>Conhecimentos básicos de Python</li>
     <li>Conhecimentos da biblioteca Tkinter</li>
 </ul>
 <hr>
-<h3>Estrutura do programa</h3>
-<h2>MENU</h2>
+<h2>Estrutura do programa</h2>
+<h3>MENU</h3>
 <ol>
 <li>Visão geral</li>
 <li>Membros</li>
