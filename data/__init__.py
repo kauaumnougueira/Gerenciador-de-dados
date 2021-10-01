@@ -1,8 +1,9 @@
 from interface import deleteFrameAndGo
-from system import collectData, dataFormattingFilter, notice, transcriptToDatabase, dataLoggingSystem
-from time import sleep
+from system import collectData, dataFormattingFilter, transcriptToDatabase
 from tkinter import messagebox
 
+#====================================
+#FUNÇÕES DE MANIPULAÇÃO DE ARQUIVO
 def checkData(arquivo = 'data.txt'):
 
     if searchFile(arquivo):
@@ -38,7 +39,12 @@ def readFile(arquivo = 'data.txt'):
     finally:
         a.close()
 
+#====================================
+
 def requestData(action):
+    """
+    Captura dados do .txt e transforma cada linha em um elemento de um vetor.
+    """
     raw_data = readFile()
     data = dataFormattingFilter('load_from_data_base', raw_data)
     members_data = []
@@ -76,6 +82,9 @@ all_data = [member_data, report_data]
 #variaveis de dados
 
 def dataRegistration(action, new_data, arquivo = 'data.txt'):
+    """
+    Faz a gravação de dados no banco de dados.
+    """
     member_data = requestData('members_data')
     report_data = requestData('reports_data')
     data = [member_data, report_data]
@@ -87,83 +96,34 @@ def dataRegistration(action, new_data, arquivo = 'data.txt'):
         if action == 'member_registration':
             member_data.append(new_data)
             a.write(transcriptToDatabase(data))
-            #notice("[Novo membro adicionado...]")
-
+            
         if action == 'update_info_member':
             data = [new_data, report_data]
             a.write(transcriptToDatabase(data))
-            notice("[Os dados foram atualizados...]")
-
+            
         if action == 'report_registration':
             report_data.insert(0, new_data)
             a.write(transcriptToDatabase(data))
-            notice("[Novo relatório adicionado...]")
+
         if action == 'update_info_report':
             data = [member_data, new_data]
             a.write(transcriptToDatabase(data))
-            notice("[Os dados foram atualizados...]")
 
 def checkStatus(action):
+    """
+    Checa se existe pelo menos um membro ou relatório no banco de dados. Retorno do tipo bool.
+    """
     if action == 'member_exists':
         if requestData('number_of_members') > 0: return True
-        else:
-            notice("[Não há membros para listar...]")
-            return False
+        else: return False
     if action == 'report_exists':
         if requestData('number_of_reports') > 0: return True
-        else:
-            notice("[Não há relatórios para listar...]")
-            return False
-
-def editData(action, position_in_matrix, position_in_list = False):
-    members_data = requestData('members_data')
-    reports_data = requestData('reports_data')
-
-    if action == 'member_data':
-        if position_in_list == 0:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Nome"])
-        elif position_in_list == 1:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Cargo"])
-        elif position_in_list == 2:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Telefone"])
-        elif position_in_list == 3:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Aniversário"])
-        elif position_in_list == 4:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Entrada"])
-    
-        members_data[position_in_matrix][position_in_list] = new_data[0]
-        return members_data
-
-    if action == 'delete_member_data':
-        del(members_data[position_in_matrix])
-        return members_data
-    
-    if action == 'report_data':
-        if position_in_list == 0:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Data"])
-        elif position_in_list == 1:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Frequência"])
-        elif position_in_list == 2:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Visitantes"])
-        elif position_in_list == 3:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Conversões"])
-        elif position_in_list == 4:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Preletor"])
-        elif position_in_list == 5:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Local"])
-        elif position_in_list == 6:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Oferta"])
-        elif position_in_list == 7:
-            new_data = dataLoggingSystem("EDIÇÃO DE DADO", ["Observações"])
-
-        reports_data[position_in_matrix][position_in_list] = new_data[0]
-        return reports_data
-    
-    if action == 'delete_report_data':
-        del(reports_data[position_in_matrix])
-        return reports_data
+        else: return False
 
 def processMemberRegistration(frame, action, data, destiny):
+    """
+    Registra os dados do membro após tê-los filtrado.
+    """
     new_data = collectData(data)
     dataRegistration(action, new_data)
     messagebox.showinfo(title = "Aviso", message = "Novo membro adicionado.")

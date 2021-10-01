@@ -1,4 +1,3 @@
-from cgitb import text
 from functools import partial
 from tkinter import *
 from tkinter import ttk
@@ -6,6 +5,22 @@ from data import *
 from system import *
 from interface import *
 
+"""
+menu
+    - overview
+    - members
+        + listar membros
+        + cadastrar membros
+    - reports
+        + listar relatórios
+        + cadastrar relatórios
+    - backups
+        + listar backups
+        + fazer novo backup
+"""
+
+
+#INSTANCIA O OBJETO Tk() E ATRIBUI à VARIÁVEL window
 window = Tk()
 
 #=================================================
@@ -51,7 +66,7 @@ def members():
     drawMenu(frame, titulo, [consultar_lista, cadastrar_membro], voltar)
 
 #=================================================
-
+#EM DESENVOLVIMENTO
 def listMembers():
     frame = initializeFrame(window)
 
@@ -84,12 +99,12 @@ def memberRegistration():
 
 #=================================================
 
-#INICIO
+#INICIAR O PROGRAMA
 menu()
 
-#configurações
+#CONFIGURAÇÕES APLICADAS NA INICIALIZAÇÃO
 window.title("Célula Nova Vida")
-window.iconphoto(True, PhotoImage(file='/home/pedro/Área de Trabalho/Projetos/Gerenciador de dados/Protótipo 2/icone_app.png'))
+window.iconphoto(True, PhotoImage(file='icone_app.png'))
 window.geometry("325x400")
 window.resizable(width = 0, height = 0)
 window.mainloop()

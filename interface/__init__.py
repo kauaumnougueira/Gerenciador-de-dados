@@ -2,6 +2,9 @@ from functools import partial
 from tkinter import *
 
 def initializeFrame(parent):
+    """
+    Inicializa o frame onde todos os elementos gráficos do programa devem estar contidos.
+    """
     frame = Frame(parent, borderwidth = 1, relief = "raised")
     frame.place(x = 5, y = 5, width = 315, height = 390)
 
@@ -18,6 +21,10 @@ def configureCommands(frame, elements, destinations):
         position += 1
 
 def drawMenu(frame, title, elements, back_button = False):
+    """
+    elements = vetor com todos os elementos gráficos
+    Desenha um menu com títulos e botões.
+    """
     line = 4
     w_label = 38
 
@@ -48,6 +55,11 @@ def drawMenu(frame, title, elements, back_button = False):
         back_button.grid(row = line+1, column = 2)
 
 def drawForm(frame, title, elements, texts, confirm_button, back_button):
+    """
+    elements = vetor com todos os elementos gráficos
+    texts = vetor com os nomes que seguem cada um dos elementos gráficos dispostos
+    Desenha todos os elementos gráficos que foram passados como parâmetro(caixa de entrada, labels etc.). e organiza-os no formato de um formulário.
+    """
     line = 4
     w_label = 38
     position = 0
