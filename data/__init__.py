@@ -14,8 +14,8 @@ def checkData(arquivo = 'data.txt'):
 
 def searchFile(arquivo = 'data.txt'):
     try:
-        a = open(arquivo, 'rt') #leitura arquivo texto
-        a.close()
+        archive = open(arquivo, 'rt') #leitura arquivo texto
+        archive.close()
     except FileNotFoundError:
         return False
     else:
@@ -23,7 +23,7 @@ def searchFile(arquivo = 'data.txt'):
 
 def createFile(arquivo = 'data.txt'):
     try:
-        a = open(arquivo, 'wt+') #escrever arquivo e se não existir criar
+        archive = open(arquivo, 'wt+') #escrever arquivo e se não existir criar
     except:
         print("Não foi possível criar o banco de dados.")
     else:
@@ -31,13 +31,13 @@ def createFile(arquivo = 'data.txt'):
 
 def readFile(arquivo = 'data.txt'):
     try:
-        a = open(arquivo, 'rt')
+        archive = open(arquivo, 'rt')
     except:
         print("Não foi possível ler os dados.")
     else:
-        return a.readlines()
+        return archive.readlines()
     finally:
-        a.close()
+        archive.close()
 
 #====================================
 
@@ -89,25 +89,25 @@ def dataRegistration(action, new_data, arquivo = 'data.txt'):
     report_data = requestData('reports_data')
     data = [member_data, report_data]
     try:
-        a = open(arquivo, 'wt') #a de append, adicionar dados no arquivo de texto
+        archive = open(arquivo, 'wt') #a de append, adicionar dados no arquivo de texto
     except:
         print("Erro ao acessar banco de dados.")
     else:
         if action == 'member_registration':
             member_data.append(new_data)
-            a.write(transcriptToDatabase(data))
+            archive.write(transcriptToDatabase(data))
             
         if action == 'update_info_member':
             data = [new_data, report_data]
-            a.write(transcriptToDatabase(data))
+            archive.write(transcriptToDatabase(data))
             
         if action == 'report_registration':
             report_data.insert(0, new_data)
-            a.write(transcriptToDatabase(data))
+            archive.write(transcriptToDatabase(data))
 
         if action == 'update_info_report':
             data = [member_data, new_data]
-            a.write(transcriptToDatabase(data))
+            archive.write(transcriptToDatabase(data))
 
 def checkStatus(action):
     """
