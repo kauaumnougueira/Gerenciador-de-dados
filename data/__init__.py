@@ -62,7 +62,7 @@ def requestData(action):
         for i in range(0, len(data)):
             if data[i] == '#MEMBER#':
                 members_data.append([data[i+1], data[i+2], data[i+3], data[i+4], data[i+5]]) #"Nome", "Cargo", "Telefone", "Aniversário", "Data de entrada"
-        return members_data #RETORNA UMA MATRIZ COM VETORES PARA CADA MEMBRO
+        return members_data #RETORNA UMA MATRIZ COM UM VETOR PARA CADA MEMBRO
     if action == 'number_of_reports':
         for i in range(0, len(data)):
             if data[i] == '#REPORT#':
@@ -72,7 +72,7 @@ def requestData(action):
         for i in range(0, len(data)):
             if data[i] == '#REPORT#':
                 reports_data.append([data[i+1], data[i+2], data[i+3], data[i+4], data[i+5], data[i+6], data[i+7], data[i+8]])
-        return reports_data #RETORNA UMA MATRIZ COM VETORES PARA CADA RELATÓRIO
+        return reports_data #RETORNA UMA MATRIZ COM UM VETOR PARA CADA RELATÓRIO
 
 #variaveis de dados
 report_data = requestData('reports_data')
@@ -90,6 +90,7 @@ def dataRegistration(action, new_data, arquivo = 'data.txt'):
     data = [member_data, report_data]
     try:
         a = open(arquivo, 'wt') #a de append, adicionar dados no arquivo de texto
+        #arquivo é o arquivo editável depois de aberto
     except:
         print("Erro ao acessar banco de dados.")
     else:
