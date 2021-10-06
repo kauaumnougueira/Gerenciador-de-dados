@@ -62,17 +62,25 @@ def members():
     cadastrar_membro = Button(frame, text="Cadastrar")
     voltar = Button(frame, text="Voltar")
 
-    configureCommands(frame, [consultar_lista, cadastrar_membro, voltar], [menu, memberRegistration, menu])
+    configureCommands(frame, [consultar_lista, cadastrar_membro, voltar], [listMembers, memberRegistration, menu])
     drawMenu(frame, titulo, [consultar_lista, cadastrar_membro], voltar)
 
 #=================================================
 #EM DESENVOLVIMENTO
 def listMembers():
-    frame = initializeFrame(window)
+    frame = initializeScrollableFrame(window)
 
-    titulo = Label(frame, text = "LISTA DE MEMBROS")
+    titulo = Label(frame["main_frame"], text = "LISTA DE MEMBROS")
 
-    #função para criar várias labels com os nomes dos membros
+    #======= elementos que serão colocados no scrollable frame ===
+    for i in range(50):
+        Label(frame["scrollable_frame"], text=f"Membro {i}").pack()
+    #=============================================================
+
+    voltar = Button(frame["main_frame"], text="Voltar")
+
+    configureCommands(frame["main_frame"], [voltar], [members])
+    drawMenuListMembers(frame["main_frame"], titulo, voltar)
 
 #=================================================
 
@@ -99,7 +107,6 @@ def memberRegistration():
 
 #=================================================
 
-#INICIAR O PROGRAMA
 menu()
 
 #CONFIGURAÇÕES APLICADAS NA INICIALIZAÇÃO
@@ -107,4 +114,4 @@ window.title("Célula Nova Vida")
 window.iconphoto(True, PhotoImage(file='img/icone_app.png'))
 window.geometry("325x400")
 window.resizable(width = 0, height = 0)
-window.mainloop()
+window.mainloop() #INICIAR O PROGRAMA

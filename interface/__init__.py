@@ -9,6 +9,30 @@ def initializeFrame(parent):
     frame.place(x = 5, y = 5, width = 315, height = 390)
 
     return frame
+    
+def initializeScrollableFrame(parent):
+    """
+    Inicializa o frame (rolável) onde os elementos gráficos devem estar contidos.
+    """
+
+    main_frame = Frame(parent, borderwidth = 1, relief = "raised")
+    container = Frame(main_frame, borderwidth = 1, relief = "sunken")
+    canvas = Canvas(container)
+    scrollbar = Scrollbar(container, orient = "vertical", command = canvas.yview)
+    scrollable_frame = Frame(canvas)
+
+    scrollable_frame.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    canvas.create_window((0, 0), window = scrollable_frame, anchor="nw")
+
+    canvas.configure(yscrollcommand = scrollbar.set)
+
+    main_frame.place(x = 5, y = 5, width = 315, height = 390)
+    container.place(x = 5, y = 60, width = 305, height = 285)
+    canvas.place(x = 5, y = 5, width = 310, height = 275)
+    scrollbar.pack(side="right", fill="y")
+
+    return {"scrollable_frame": scrollable_frame, "main_frame": main_frame}
 
 def deleteFrameAndGo(frame, destiny):
     frame.destroy()
@@ -94,5 +118,18 @@ def drawForm(frame, title, elements, texts, confirm_button, back_button):
 
     confirm_button.grid(row = line+1, column = 2, columnspan = 2)
 
-def drawListMembers(frame, title):
-    pass
+def drawMenuListMembers(frame, title, back_button):
+    """
+    Desenha os elementos gráficos no frame principal do menu 'Lista de membros'
+    """
+    w_label = 38
+
+    spacing_1 = Label(frame, width = w_label, height = 1)
+    spacing_for_scrollable_frame = Label(frame, height = 18)
+
+    spacing_1.grid(row = 1, column = 1, columnspan = 3)
+    title.grid(row = 2, column = 1, columnspan = 3)
+    spacing_for_scrollable_frame.grid(row = 3, column = 1, sticky = W)
+
+    back_button["width"] = 8
+    back_button.grid(row = 4, column = 2)
