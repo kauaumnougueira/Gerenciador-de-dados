@@ -6,6 +6,14 @@ from system import *
 from interface import *
 
 """
+-- algoritmo dos menus --
+1. instancia e desenha o frame principal
+2. instancia os elementos gráficos
+3. aplica configurações nos elementos gráficos(atribui link a botões, inputs etc) através da função 'configureCommands()'
+4. desenha todos os elementos gráficos dentro do frame principal através da função
+"""
+
+"""
 menu
     - overview
     - members
@@ -80,7 +88,7 @@ def listMembers():
     voltar = Button(frame["main_frame"], text="Voltar")
 
     configureCommands(frame["main_frame"], [voltar], [members])
-    drawMenuListMembers(frame["main_frame"], titulo, voltar)
+    drawScrollableMenu(frame, titulo, voltar)
 
 #=================================================
 
