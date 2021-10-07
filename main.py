@@ -15,20 +15,20 @@ from interface import *
 
 """
 menu
-    - overview
-    - members
-        + listMembers
-        + memberRegistration
-    - reports
-        + listReports
-        + newReport
-    - backups
-        + listBackups
-        + newBackup
+    1. overview
+    2. members
+        2.1. listMembers
+            2.1.1. memberProfile
+        2.2. memberRegistration
+    3. reports
+        3.1. listReports
+        3.2. newReport
+    4. backups
+        4.1. listBackups
+        4.2. newBackup
 """
 
-
-#INSTANCIA O OBJETO Tk() E ATRIBUI à VARIÁVEL window
+#INSTANCIA O OBJETO Tk() E ATRIBUI à VARIÁVEL window PARA CRIAR A JANELA ONDE SERÃO DISPOSTOS OS FRAMES
 window = Tk()
 
 #=================================================
@@ -47,7 +47,7 @@ def menu():
     drawMenu(frame, titulo, [visao_geral, membros, relatorios, backup])
 
 #=================================================
-
+# 1
 def overview():
     frame = initializeFrame(window)
     
@@ -60,7 +60,7 @@ def overview():
     drawMenu(frame, titulo, [consultar_lista], voltar)
 
 #=================================================
-
+# 2
 def members(): 
     frame = initializeFrame(window)
     
@@ -74,24 +74,30 @@ def members():
     drawMenu(frame, titulo, [consultar_lista, cadastrar_membro], voltar)
 
 #=================================================
-#EM DESENVOLVIMENTO
+# 2.1
 def listMembers():
     frame = initializeScrollableFrame(window)
 
     titulo = Label(frame["main_frame"], text = "LISTA DE MEMBROS")
 
-    #======= elementos que serão colocados no scrollable frame ===
-    for i in range(50):
-        Label(frame["scrollable_frame"], text=f"Membro {i}").pack()
-    #=============================================================
+    initializeAndConfigureListButtons(frame, 'members_data', memberProfile)
 
     voltar = Button(frame["main_frame"], text="Voltar")
 
     configureCommands(frame["main_frame"], [voltar], [members])
     drawScrollableMenu(frame, titulo, voltar)
 
-#=================================================
 
+#=================================================
+# 2.1.1
+#EM DESENVOLVIMENTO
+def memberProfile(index): 
+    frame = initializeFrame(window)
+
+    titulo = Label(frame, text = "PERFIL DO MEMBRO")
+#=================================================
+# 2.2
+#EM DESENVOLVIMENTO
 def memberRegistration():
     frame = initializeFrame(window)
 
@@ -122,4 +128,4 @@ window.title("Célula Nova Vida")
 window.iconphoto(True, PhotoImage(file='img/icone_app.png'))
 window.geometry("325x400")
 window.resizable(width = 0, height = 0)
-window.mainloop() #INICIAR O PROGRAMA
+window.mainloop() #INICIA A JANELA

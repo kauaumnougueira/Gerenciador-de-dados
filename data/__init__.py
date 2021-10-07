@@ -44,6 +44,9 @@ def readFile(arquivo = 'data.txt'):
 def requestData(action):
     """
     Captura dados do .txt e transforma cada linha em um elemento de um vetor.
+    1. Através da função redFile() todos os dados são copiados do banco de dados para a variável 'raw_data'.
+    2. Através da função dataFormattingFilter() os dados copiados são formatados e atribuídos à variável 'data'.
+    3. Verifica a ação solicitada e retorna os dados específicos.
     """
     raw_data = readFile()
     data = dataFormattingFilter('load_from_data_base', raw_data)
@@ -84,6 +87,9 @@ all_data = [member_data, report_data]
 def dataRegistration(action, new_data, arquivo = 'data.txt'):
     """
     Faz a gravação de dados no banco de dados.
+    1. Solicita os dados antigos do banco de dados.
+    2. Através do tratamento de erros e exceções checa se é possível abrir o arquivo para escrita.
+    3. Verifica a ação solicitada e transcreve os novos dados para o banco de dados.
     """
     member_data = requestData('members_data')
     report_data = requestData('reports_data')
@@ -124,6 +130,10 @@ def checkStatus(action):
 def processMemberRegistration(frame, action, data, destiny):
     """
     Registra os dados do membro após tê-los filtrado.
+    1. Coleta os dados de entrada do usuário com a função collectData() e atribui à variável 'new_data' o retorno dessa função(uma lista/array/vetor).
+    2. Grava os dados no banco de dados através da função dataRegistration().
+    3. Dispara uma caixa de mensagem após o registro das informações.
+    4. Deleta o Frame atual e prossegue para o destino.
     """
     new_data = collectData(data)
     dataRegistration(action, new_data)
