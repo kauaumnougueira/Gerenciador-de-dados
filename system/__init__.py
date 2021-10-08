@@ -13,6 +13,7 @@ def collectData(input_data):
 
     return data
 
+
 def dataFormattingFilter(action, vector_data):
     """
     Filtra as strings/elementos para carregar do banco de dados ou gravar no banco de dados.
@@ -35,6 +36,7 @@ def dataFormattingFilter(action, vector_data):
                 filtred_data.append(element)
         
     return filtred_data
+
 
 def structuralRearrangement(action, data):
     """
@@ -65,6 +67,7 @@ def structuralRearrangement(action, data):
     
     return rearrangement_data
 
+
 def transcriptToDatabase(data):
     """
     Junta todos os elementos do vetor numa string única.
@@ -86,4 +89,3 @@ def transcriptToDatabase(data):
             transcribed_data += f"{infos}"
         
     return transcribed_data
-

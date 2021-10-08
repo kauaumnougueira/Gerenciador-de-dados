@@ -14,7 +14,7 @@ from interface import *
 """
 
 """
-menu
+0. menu
     1. overview
     2. members
         2.1. listMembers
@@ -32,7 +32,7 @@ menu
 window = Tk()
 
 #=================================================
-
+# 0
 def menu():
     frame = initializeFrame(window)
 
@@ -90,11 +90,40 @@ def listMembers():
 
 #=================================================
 # 2.1.1
-#EM DESENVOLVIMENTO
 def memberProfile(index): 
     frame = initializeFrame(window)
 
     titulo = Label(frame, text = "PERFIL DO MEMBRO")
+
+    informations = instantiateLabelsForMemberInformation(frame, index)
+
+    voltar = Button(frame, text = "Voltar")
+    editar = Button(frame, text = "Editar")
+    excluir = Button(frame, text = "Excluir")
+
+    configureCommands(frame, [voltar, editar, excluir], [listMembers, lambda: editProfile(index), lambda: processMemberData(frame, 'delete_info_member', listMembers, index = index)], [2])
+    drawInfos(frame, "members_informations", titulo, ["Nome: ", "Cargo: ", "Telefone: ", "Aniversário: ", "Entrada: "], informations, voltar, edit_button = editar, delete_button = excluir)
+
+#=================================================
+# 2.1.1.1
+def editProfile(index):
+    frame = initializeFrame(window)
+
+    titulo = Label(frame, text = "EDIÇÃO DE INFORMAÇÕES")
+
+    nome = Entry(frame, width = 20)
+    cargo = ttk.Combobox(frame, values = ["Líder", "Vice-líder", "Tesoureiro", "Membro"], state = 'readonly', width = 10)
+    telefone = Entry(frame, width = 15)
+    aniversario = Entry(frame, width = 10)
+    entrada = Entry(frame, width = 10)
+
+    voltar = Button(frame, text = "Voltar")
+    confirmar = Button(frame, text = "Confirmar", padx = 40)
+
+    insertDefaultText(index, [nome, cargo, telefone, aniversario, entrada])
+    configureCommands(frame, [voltar, confirmar], [lambda: memberProfile(index), lambda: processMemberData(frame, 'update_info_member', lambda: memberProfile(index), data = [nome, cargo, telefone, aniversario, entrada], index = index)], [0, 1])
+    drawInfos(frame, "form", titulo, ["Nome: ", "Telefone: ", "Cargo: ", "Aniversário: ", "Entrada: "], [nome, telefone, cargo, aniversario, entrada], voltar, confirmar)
+
 #=================================================
 # 2.2
 #EM DESENVOLVIMENTO
@@ -104,7 +133,7 @@ def memberRegistration():
     titulo = Label(frame, text = "CADASTRO DE NOVO MEMBRO")
 
     nome = Entry(frame, width = 20)
-    cargo = ttk.Combobox(frame, values = ["Líder", "Vice-líder", "Tesoureiro", "Membro"], width = 10)
+    cargo = ttk.Combobox(frame, values = ["Líder", "Vice-líder", "Tesoureiro", "Membro"], state = 'readonly', width = 10)
     cargo.current(3)
 
     telefone = Entry(frame, width = 15)
@@ -112,12 +141,10 @@ def memberRegistration():
     entrada = Entry(frame, width = 10)
 
     voltar = Button(frame, text = "Voltar")
-    voltar["command"] = partial(deleteFrameAndGo, frame, members)
-
     confirmar = Button(frame, text = "Confirmar", padx = 40)
-    confirmar["command"] = partial(processMemberRegistration, frame, 'member_registration', [nome, cargo, telefone, aniversario, entrada], members)
 
-    drawForm(frame, titulo, [nome, telefone, cargo, aniversario, entrada], ["Nome: ", "Telefone: ", "Cargo: ", "Aniversário: ", "Entrada: "], confirmar, voltar)
+    configureCommands(frame, [voltar, confirmar], [members, lambda: processMemberData(frame, 'member_registration', members, data = [nome, cargo, telefone, aniversario, entrada])], [1])
+    drawInfos(frame, "form", titulo, ["Nome: ", "Telefone: ", "Cargo: ", "Aniversário: ", "Entrada: "], [nome, telefone, cargo, aniversario, entrada], voltar, confirmar)
 
 #=================================================
 

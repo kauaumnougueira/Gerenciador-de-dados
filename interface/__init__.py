@@ -13,7 +13,8 @@ def initializeFrame(parent):
     frame.place(x = 5, y = 5, width = 315, height = 390)
 
     return frame
-    
+
+
 def initializeScrollableFrame(parent):
     """
     Inicializa o Frame principal e o Frame rolável(é um elemento gráfico que será inserido no frame principal, portanto será desenhado depois).
@@ -38,6 +39,7 @@ def initializeScrollableFrame(parent):
 
     return {"scrollable_frame": scrollable_frame, "main_frame": main_frame, "container": container, "canvas": canvas, "scrollbar": scrollbar}
 
+
 def initializeAndConfigureListButtons(frame, action, destiny):
     """
     Inicializa e configura os links dos botões de uma lista.
@@ -48,37 +50,74 @@ def initializeAndConfigureListButtons(frame, action, destiny):
     5. Atribui ao parâmetro "command"(parâmetro que guarda o evento que é disparado após detectar o click no botão) o algoritmo para deletar o Frame atual e prosseguir para o próximo Frame linkado com aquele botão.
     6. Itera sobre as variáveis index(guarda o índice de cada elemento da lista/vetor/array) e line(linha na qual o botão vai ser desenhado).
     """
-    index = 0
     line = 1
 
     if action == 'members_data':
         members_data = data.requestData('members_data')
-        for member in members_data:
+        for index, member in enumerate(members_data):
             option = Button(frame["scrollable_frame"], text=f"{member[0]}", anchor = W, relief="ridge", width = 31, height = 2)
             option.grid(row = line, column = 1)
             option["command"] = partial(deleteFrameAndGo, frame["main_frame"], destiny, index)
             
-            index += 1
             line += 1
+
+
+def instantiateLabelsForMemberInformation(frame, index_member):
+    """
+    Instancia Labels contendo as informações do membro.
+    1. Por meio do índice os dados do membro escolhido são requisitados através da função requestData().
+    2. A variável 'informations'(lista onde serão atribuídas as instâncias dos objetos Label) é inicializada.
+    3. Através do laço são instanciadas Labels e adicionadas à lista 'informations'.
+    4. Retorna a lista 'informations'.
+    """
+    member_data = data.requestData("members_data")[index_member]
+    informations = []
+
+    for information in member_data:
+        label = Label(frame, text = information)
+        informations.append(label)
+    
+    return informations
+
+
+def insertDefaultText(member_index, elements):
+    """
+    Insere determinada informação no parâmetro de texto padrão do elemento gráfico.
+    1. Solicita os dados do membro por meio do índice através da função requestData().
+    2. Através do laço verifica o nome do objeto e insere a informação no parâmetro de texto padrão.
+    """
+    member_data = data.requestData("members_data")[member_index]
+
+    for index, element in enumerate(elements):
+        if element.__class__.__name__ == 'Entry': element.insert(0, member_data[index])
+        if element.__class__.__name__ == 'Combobox': element.set(member_data[index])
+
 
 def deleteFrameAndGo(frame, destiny, parameter = ''):
     """
     Deleta o Frame atual(objeto contigo na variável 'frame') para evitar o acúmulo de Frames na janela.
+    1. Destrói o frame usando o método destroy()
+    2. Operador ternário que verifica se há parâmetros ou não.
     """
     frame.destroy()
     destiny() if parameter == '' else destiny(parameter)
 
-def configureCommands(frame, elements, destinations):
+
+def configureCommands(frame, elements, destinations, destiny_with_parameter = ''):
     """
     Configura links associando um elemento da variável 'elements' com um elemento da variável 'destinations' através do índice.
     1. Através de um laço percorre cada um dos elementos contidos em 'elements'.
-    2. Atribui ao parâmetro "command" daquele elemento o destino(associa cada elemento de 'destinations' com cada elemento de 'elements' através do índice).
-    3. Itera na variável 'index' e finaliza o laço.
+    2. Verifica se há algum destino com parâmetro.
+    3. Se há, então atribui ao parâmetro "command" daquele elemento o destino(associa cada elemento de 'destinations' com cada elemento de 'elements' através do índice) passando os parâmetros.
+    4. Caso não haja, executa a função deleteFrameAndGo().
     """
-    index = 0
-    for element in elements:
-        element["command"] = partial(deleteFrameAndGo, frame, destinations[index])
-        index += 1
+    for index, element in enumerate(elements):
+        if destiny_with_parameter == '': element["command"] = partial(deleteFrameAndGo, frame, destinations[index]) 
+        else:    
+            for destiny_index in destiny_with_parameter:
+                    if destiny_index == index: element["command"] = destinations[index] 
+                    else: element["command"] = partial(deleteFrameAndGo, frame, destinations[index])
+ 
 
 def drawMenu(frame, title, elements, back_button = False):
     """
@@ -118,19 +157,20 @@ def drawMenu(frame, title, elements, back_button = False):
         back_button["width"] = 8
         back_button.grid(row = line+1, column = 2)
 
-def drawForm(frame, title, inputs, texts, confirm_button, back_button):
+
+def drawInfos(frame, mode, title, texts, elements, back_button, confirm_button = False, edit_button = False, delete_button = False):
     """
-    Desenha todos os elementos gráficos que foram passados como parâmetro(caixa de entrada, labels etc.). e organiza-os no formato de um formulário.
-    1. Inicializa as variáveis line(linha do grid onde será colocado o elemento),  'w_label'(largura do Label), index(índice dos textos) e os Labels de espaçamento.
+    Desenha todos os elementos gráficos que foram passados como parâmetro(caixa de entrada, labels etc.). e organiza-os no formato indicado através do parâmetro 'mode'.
+    1. Inicializa as variáveis line(linha do grid onde será colocado o elemento),  'w_label'(largura do Label) e os Labels de espaçamento.
     2. Desenha os Labels de espaçamento e o título.
-    3. Através do laço são desenhados os textos(contidos em 'texts') e os inputs(contidos em 'inputs').
-    4. São desenhados os botões de voltar e de confirmação do formulário.
-    inputs = vetor com todos os inputs gráficos
-    texts = vetor com os nomes que seguem cada um dos elementos gráficos dispostos
+    3. Através do laço são desenhados os textos(contidos em 'texts') e os elementos gráficos(contidos em 'elements').
+    4. Verifica a ação solicitada.
+    5. Por padrão é desenhado o botão 'back_button', os demais serão desenhados apenas se tiverem o valor True.
+    
+    texts: vetor com os nomes que seguem cada um dos elementos gráficos dispostos
     """
     line = 4
     w_label = 38
-    index = 0
 
     spacing_1 = Label(frame, width = w_label, height = 1)
     spacing_2 = Label(frame, width = w_label, height = 1)
@@ -138,29 +178,36 @@ def drawForm(frame, title, inputs, texts, confirm_button, back_button):
     spacing_1.grid(row = 1, column = 1, columnspan = 3)
     title.grid(row = 2, column = 1, columnspan = 3)
     spacing_2.grid(row = 3, column = 1, columnspan = 3)
-    
-    for input in inputs:
+
+    for index, element in enumerate(elements):
         spacing_on_top_of_the_button = Label(frame, width = w_label, height = 1)
         spacing_on_top_of_the_button.grid(row = line, column = 1, columnspan = 3)
         
         line += 1 
         
-        label_info = Label(frame, text = texts[index])
-        label_info.grid(row = line, column = 1, sticky = E)
+        text = Label(frame, text = texts[index])
+        text.grid(row = line, column = 1, sticky = E)
 
-        
-        input.grid(row = line, column = 2, sticky = W)
+        element.grid(row = line, column = 2, sticky = W)
         
         line += 1
-        index += 1
-
+    
     spacing_3 = Label(frame, width = w_label, height = 3)
     spacing_3.grid(row = line, column = 1, columnspan = 3)
 
-    back_button["width"] = 7
-    back_button.grid(row = line+1, column = 1, sticky = E)
+    if mode == 'members_informations':
+        back_button["width"] = 7
+        back_button.place(x = 15, y = 350)
 
-    confirm_button.grid(row = line+1, column = 2, columnspan = 2)
+        edit_button.place(x = 150, y = 350)
+        delete_button.place(x = 225, y = 350)
+
+    if mode == 'form':
+        back_button["width"] = 7
+        back_button.grid(row = line+1, column = 1, sticky = E)
+
+        confirm_button.grid(row = line+1, column = 2, columnspan = 2)
+
 
 def drawScrollableMenu(frame, title, back_button):
     """

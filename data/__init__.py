@@ -12,6 +12,7 @@ def checkData(arquivo = 'data.txt'):
         print("Banco de dados não encontrado.")
         createFile(arquivo)
 
+
 def searchFile(arquivo = 'data.txt'):
     try:
         archive = open(arquivo, 'rt') #leitura arquivo texto
@@ -21,6 +22,7 @@ def searchFile(arquivo = 'data.txt'):
     else:
         return True
 
+
 def createFile(arquivo = 'data.txt'):
     try:
         archive = open(arquivo, 'wt+') #escrever arquivo e se não existir criar
@@ -28,6 +30,7 @@ def createFile(arquivo = 'data.txt'):
         print("Não foi possível criar o banco de dados.")
     else:
         print("Banco de dados criada.")
+
 
 def readFile(arquivo = 'data.txt'):
     try:
@@ -44,7 +47,7 @@ def readFile(arquivo = 'data.txt'):
 def requestData(action):
     """
     Captura dados do .txt e transforma cada linha em um elemento de um vetor.
-    1. Através da função redFile() todos os dados são copiados do banco de dados para a variável 'raw_data'.
+    1. Através da função readFile() todos os dados são copiados do banco de dados para a variável 'raw_data'.
     2. Através da função dataFormattingFilter() os dados copiados são formatados e atribuídos à variável 'data'.
     3. Verifica a ação solicitada e retorna os dados específicos.
     """
@@ -77,12 +80,14 @@ def requestData(action):
                 reports_data.append([data[i+1], data[i+2], data[i+3], data[i+4], data[i+5], data[i+6], data[i+7], data[i+8]])
         return reports_data #RETORNA UMA MATRIZ COM UM VETOR PARA CADA RELATÓRIO
 
+
 #variaveis de dados
 report_data = requestData('reports_data')
 number_of_members = requestData('number_of_members')
 member_data = requestData('members_data')
 all_data = [member_data, report_data]
 #variaveis de dados
+
 
 def dataRegistration(action, new_data, arquivo = 'data.txt'):
     """
@@ -116,6 +121,7 @@ def dataRegistration(action, new_data, arquivo = 'data.txt'):
             data = [member_data, new_data]
             archive.write(transcriptToDatabase(data))
 
+
 def checkStatus(action):
     """
     Checa se existe pelo menos um membro ou relatório no banco de dados. Retorno do tipo bool.
@@ -127,15 +133,47 @@ def checkStatus(action):
         if requestData('number_of_reports') > 0: return True
         else: return False
 
-def processMemberRegistration(frame, action, data, destiny):
+
+def processMemberData(frame, action, destiny, data = False, index = False):
     """
-    Registra os dados do membro após tê-los filtrado.
-    1. Coleta os dados de entrada do usuário com a função collectData() e atribui à variável 'new_data' o retorno dessa função(uma lista/array/vetor).
-    2. Grava os dados no banco de dados através da função dataRegistration().
-    3. Dispara uma caixa de mensagem após o registro das informações.
-    4. Deleta o Frame atual e prossegue para o destino.
+    Coleta os dados dos inputs, formata-os e transcreve para o banco de dados.
+    + Ação 'member_registration'
+        1. Coleta os dados de entrada do usuário com a função collectData() e atribui à variável 'new_data' o retorno dessa função(uma lista/array/vetor).
+        2. Grava os dados no banco de dados através da função dataRegistration().
+        3. Dispara uma caixa de mensagem após o registro das informações.
+        4. Deleta o Frame atual e prossegue para o destino.
+    + Ação 'delete_info_member'
+        1. Dispara uma caixa de mensagem para confirmar a decisão do usuário.
+        2. Caso retornar True os dados dos membros são requisitados através da função requestData().
+        3. Os dados do membro escolhido são deletados por meio do índice através de del().
+        4. Grava os dados no banco de dados através da função dataRegistration().
+        5. Deleta o Frame atual e prossegue para o destino.
+    + Ação 'update_info_member'
+        1. Dispara uma caixa de mensagem para confirmar a decisão do usuário.
+        2. Coleta os dados de entrada do usuário com a função collectData() e atribui à variável 'new_data' o retorno dessa função(uma lista/array/vetor).
+        3. Os novos dados são substituidos na matriz 'members_data' por meio do índice.
+        4. Grava os dados no banco de dados através da função dataRegistration().
+        5. Deleta o Frame atual e prossegue para o destino.
     """
-    new_data = collectData(data)
-    dataRegistration(action, new_data)
-    messagebox.showinfo(title = "Aviso", message = "Novo membro adicionado.")
-    deleteFrameAndGo(frame, destiny)
+    if action == 'member_registration':
+        new_data = collectData(data)
+        dataRegistration(action, new_data)
+        messagebox.showinfo(title = "Aviso", message = "Novo membro adicionado.")
+        deleteFrameAndGo(frame, destiny)
+    
+    if action == 'delete_info_member':
+        decision = messagebox.askyesno(title = "Confirmar", message = "Tem certeza de que deseja excluir os dados?")
+        if decision:
+            data = requestData("members_data")
+            del(data[index])
+            dataRegistration('update_info_member', data)
+            deleteFrameAndGo(frame, destiny)
+    
+    if action == 'update_info_member':
+        decision = messagebox.askyesno(title = "Confirmar", message = "Tem certeza de que deseja salvar as modificações?")
+        if decision:
+            new_data = collectData(data)
+            members_data = requestData("members_data")
+            members_data[index] = new_data
+            dataRegistration(action, members_data)
+            deleteFrameAndGo(frame, destiny)
