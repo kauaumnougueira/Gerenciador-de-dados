@@ -1,5 +1,7 @@
 <h1>Gerenciador de dados</h1>
 <hr>
+Versão sem banco de dados
+<hr>
 <h2>Recomendações</h2>
 <ul>
     <li>Conhecimentos básicos de Python</li>
